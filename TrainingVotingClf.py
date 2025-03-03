@@ -32,10 +32,6 @@ from sklearn.metrics import balanced_accuracy_score
 os.chdir(r'.\fNIRS Data Collection\cutin')
 
 def EMA_filter(signal, alpha):
-# Exponential Moving Average 数字滤波器
-# 截止频率：f_c = f_s/(2*\pi)*arccos{1-\alpha^2/[2*(1-alpha)]}
-# 截止频率计算方法详见
-#     alpha = 0.02 # alpha = 0.02 => f_c ~ 0.359Hz
     filtered_signal = np.zeros(signal.shape)
     for i in range(len(signal)):
         if i == 0:
@@ -45,14 +41,13 @@ def EMA_filter(signal, alpha):
     return filtered_signal
 
 def EMA_filter_8ch(signals, alpha):
-# 8个通道的EMA数字滤波器 （输入（num_ch,length））
     filtered_signals=np.zeros(signals.shape)
     for i in range(len(signals)):
         filtered_signals[i,:] = EMA_filter(signals[i],alpha)
     return filtered_signals
 
 def DEMA_filter_8ch(signals,alpha):
-# Double Exponential Moving Average 双指数移动平均
+# Double Exponential Moving Average
     ema_signals=np.zeros(signals.shape)
     ema_ema_signals=np.zeros(signals.shape)
     for i in range(len(signals)):
@@ -274,8 +269,6 @@ for i in range(10):
 
     # joblib.dump(filename='voting_classifier{}.model'.format(NUM),value=voting_clf)
 
-    # 创建包含列表数据的 DataFrame
 df = pd.DataFrame(accuracy_test_matrix)
 
-# 将 DataFrame 写入 CSV 文件
 df.to_csv('classifier_acc1.csv', index=False, header=False)
